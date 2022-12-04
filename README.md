@@ -6,13 +6,6 @@ It was built over a weekend as a way of teaching myself more about Vue.
 
 Checkout __[this CodePen](https://codepen.io/evanwills/pen/BaVGqYB)__ to see a working demo.
 
-<p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="BaVGqYB" data-user="evanwills" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
-  <span>See the Pen <a href="https://codepen.io/evanwills/pen/BaVGqYB">
-  Scored</a> by Evan Wills (<a href="https://codepen.io/evanwills">@evanwills</a>)
-  on <a href="https://codepen.io">CodePen</a>.</span>
-</p>
-<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
-
 As with all my projects it is fully responsive and should also be fully accessible to assistive technologies. However, as my focus was on using/learning Vue, aesthetics have taken a back seat so it may look a bit dull.
 
 ## How to use
