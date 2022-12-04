@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import type { Ref } from 'vue'
+import type { basicPlayer, gameData, gameType } from './vite-env.d'
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import Game from './components/Game.vue'
@@ -7,35 +9,18 @@ import Game from './components/Game.vue'
 let apID = 3;
 let cpID = 0;
 
-type _tmpPlayer = {
-  id: number,
-  name: string
-}
 
-type _gameType = {
-  id: number,
-  name: string,
-  min: number|null,
-  max: number|null,
-  bonus: boolean,
-  turns: boolean
-}
-
-/**
- * @var gameNames List of unique game names
- */
-const gameNames : string[] = [];
 /**
  * @var players List of player names
  */
-const allPlayers = ref([
-  { id: 0, name: 'Ada'},
-  { id: 1, name: 'Evan'},
-  { id: 2, name: 'Georgie'},
-  { id: 3, name: 'Mallee'},
+const allPlayers : Ref<basicPlayer[]> = ref([
+  // { id: 0, name: 'Ada'},
+  // { id: 1, name: 'Evan'},
+  // { id: 2, name: 'Georgie'},
+  // { id: 3, name: 'Mallee'},
 ]);
 
-const currentPlayers = ref([]);
+const currentPlayers : Ref<basicPlayer[]> = ref([]);
 const newPlayer = ref('');
 const canStart = ref(0);
 const gameType = ref(-1);
@@ -46,9 +31,17 @@ const gameType = ref(-1);
 const started = ref(false);
 
 
-const gameTypes : _gameType[] = [
+const gameTypes : gameType[] = [
   {
     id: 0,
+    name: 'Any',
+    min: undefined,
+    max: undefined,
+    bonus: false,
+    turns: false
+  },
+  {
+    id: 1,
     name: 'Gin rummy',
     min: undefined,
     max: undefined,
@@ -56,7 +49,7 @@ const gameTypes : _gameType[] = [
     turns: false
   },
   {
-    id: 1,
+    id: 2,
     name: '500',
     min: -500,
     max: 500,
@@ -65,7 +58,7 @@ const gameTypes : _gameType[] = [
   }
 ]
 
-let currentType : _gameType|null = null;
+let currentType : gameType|null = null;
 
 /**
  * @var List of past game outcomes
@@ -159,11 +152,14 @@ function startGame (e: Event) : void {
 
   <div v-if="(started === false)">
     <h2>Players:</h2>
-    <ul>
+    <p v-if="(currentPlayers.length === 0)">
+      Enter a players name in the "Player" box then click "+"
+    </p>
+    <ul class="player-list">
       <li v-for="_player in currentPlayers" :key="_player.id">{{_player.name}}</li>
       <li class="input-submit">
         <label for="new-player">Player:</label>
-        <input type="text" id="new-player" list="player-list" :value="newPlayer" @input="updateTmpPlayer" />
+        <input type="text" id="new-player" list="player-list" :value="newPlayer" @input="updateTmpPlayer" placeholder="Alice" />
         <datalist id="player-list">
           <option v-for="player_ in allPlayers" :value="player_.name" :key="player_.id"></option>
         </datalist>
@@ -171,16 +167,17 @@ function startGame (e: Event) : void {
       </li>
     </ul>
 
-    <p>
+    <p class="game-name--wrap">
       <label for="game-name">Game:</label>
-      <select id="game-name" :value="gameType" @change="setGameType">
+      <select id="game-name" :value="gameType" @change="setGameType" aria-describedby="game-name-desk">
         <option v-for="gType in gameTypes" :key="gType.id" :value="gType.id">{{gType.name}}</option>
       </select>
+      <span v-if="(currentType === null)" id="game-name-desc">Choose type of game to play</span>
     </p>
     <button v-if="(canStart > 1 && currentType !== null)" @click="startGame">Start new game</button>
   </div>
   <div v-else="">
-    <Game :player-names="currentPlayers" :name="currentType.name" :min="currentType.min" :max="currentType.max" :turns="currentType.turns" :allowBonus="currentType.bonus" />
+    <Game :player-names="currentPlayers" :name="(currentType as gameType).name" :min="(currentType as gameType).min" :max="(currentType as gameType).max" :turns="(currentType as gameType).turns" :allowBonus="(currentType as gameType).bonus" />
   </div>
 </template>
 
@@ -198,5 +195,43 @@ h1 {
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+.player-list {
+  text-align: left;
+  margin: 0;
+  padding: 0;
+}
+.player-list li {
+  margin-left: 1rem;
+}
+li.input-submit {
+  list-style-type: none;
+  margin: 1rem 0 0 0;
+  padding: 0;
+  text-align: left;
+}
+.input-submit * {
+  display: inline-block;
+  /* background-color: hotpink; */
+}
+.input-submit input {
+  padding: 0.2rem 0.5rem;
+  margin: 0 0 0 0.3rem;
+}
+.input-submit button {
+  padding: 0.2rem 0.5rem;
+  margin: 0 0 0 0.3rem;
+  border: 0.05rem solid #fff;
+}
+#game-name {
+  display: inline-block;
+  margin-left: 0.3rem;
+}
+.game-name--wrap {
+  text-align: left;
+}
+.game-name--wrap span {
+  display: block;
+  font-size: .875rem;
 }
 </style>

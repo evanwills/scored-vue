@@ -28,7 +28,6 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
   min-height: 100vh;
 }
 
@@ -74,14 +73,7 @@ button:focus-visible {
 }
 .input-submit * {
   display: inline-block;
-}
-.input-sumbit input {
-  padding: 0.2rem 0.5rem;
-  margin: 0 0 0 0.3rem;
-}
-.input-sumbit button {
-  padding: 0.2rem 0.5rem;
-  margin: 0 0 0 0.3rem;
+  /* background-color: hotpink; */
 }
 h3::after {
   font-size: 1rem;

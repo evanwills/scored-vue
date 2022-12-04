@@ -6,8 +6,37 @@ declare module '*.vue' {
   export default component
 }
 
+export type basicPlayer = {
+  id: number,
+  name: string
+}
 
-type singleScore = {
+export type simpleScoreData = {
+  id: number,
+  score: number,
+  rank: number
+}
+
+export type keyedRank = {
+  [index: number]: number
+}
+
+export type gamePlayerData = {
+  id: number,
+  name: string,
+  score: number,
+  rank: number,
+  rankClass?: string,
+  key?: number
+}
+
+export type scoreAddedData = {
+  id: number,
+  round: number
+  total: number,
+}
+
+export type singleScore = {
   id: number,
   score: number,
   bonus: number,
@@ -19,9 +48,28 @@ type player = {
   scores: singleScore[]
 }
 
-type gameData = {
+export type gameType = {
+  id: number,
+  name: string,
+  min?: number,
+  max?: number,
+  bonus: boolean,
+  turns: boolean
+}
+
+export type gameData = {
   type: string,
   players: player[],
   turn: number,
   round: number
+}
+
+export type gameProps = {
+  playerNames: basicPlayer[],
+  name: string,
+  min: number,
+  max: number,
+  turns: boolean,
+  gameOver: boolean,
+  allowBonus: boolean
 }

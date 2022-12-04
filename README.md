@@ -1,16 +1,35 @@
-# Vue 3 + TypeScript + Vite
+# Scored
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Scored is a simple web app that keeps scores for any number of players in a game.
 
-## Recommended IDE Setup
+It was built over a weekend as a way of teaching myself more about Vue.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+Checkout __[this CodePen](https://codepen.io/evanwills/pen/BaVGqYB)__ to see a working demo.
 
-## Type Support For `.vue` Imports in TS
+<p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="BaVGqYB" data-user="evanwills" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+  <span>See the Pen <a href="https://codepen.io/evanwills/pen/BaVGqYB">
+  Scored</a> by Evan Wills (<a href="https://codepen.io/evanwills">@evanwills</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+As with all my projects it is fully responsive and should also be fully accessible to assistive technologies. However, as my focus was on using/learning Vue, aesthetics have taken a back seat so it may look a bit dull.
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+## How to use
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+* When _Scored_ is first loaded you need to
+  * add at least two players' names and
+  * select a game type.
+  * Then click the "Start new game" button.
+* In play mode you will see boxes with each player displaying their name, along with their current score (zero) plus an input box
+* As each player gets a score:
+  * enter that score into the "Latest score box" and
+  * click the "Add" button (which will appear once you enter a score)
+
+Scored shows the latest score for each player plus a running total and the players rank in the game.
+
+If you selected "500" as the game type, when one player reaches 500 or -500, the game will end and a winner will be declared.
+
+## Vue 3 + TypeScript + Vite
+
+Scored was built with Vue 3, Typescript and Vite

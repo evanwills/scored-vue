@@ -1,17 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onUpdated, reactive } from 'vue';
+import type { singleScore } from '../vite-env.d'
 
-type singleScore = {
-  id: number,
-  score: number,
-  bonus: number,
-  total: number
-}
-
-const props = defineProps({
+const props = defineProps<{
   allowBonus: Boolean,
-  scoreList: Array
-})
+  scoreList: singleScore[]
+}>()
 
 onMounted(() => {
   console.log('mounted')
@@ -57,6 +51,7 @@ onUpdated(() => {
 table {
   border-spacing: 0;
   border-collapse: collapse;
+  width: 100%;
 }
 td, th {
   border-left: 0.05rem solid #ccc;

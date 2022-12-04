@@ -1,27 +1,23 @@
 <script setup lang="ts">
 import { ref, onMounted, onUpdated } from 'vue';
+import type { singleScore } from '../vite-env.d'
 import ScoreList from './ScoreList.vue';
 
 // import { singleScore } from '../vite-env.d';
 
+
 let id = 0;
 const emit = defineEmits(['added']);
 const props = defineProps({
-  playerName: String,
-  playerId: Number,
+  playerName: { type: String, required: true },
+  playerId: { type: Number, required: true },
   playerRank: { type: Number, coerce: ((input : string) : number => parseInt(input))},
   canAdd: Boolean,
   gameOver: Boolean,
   allowBonus: Boolean,
-  detailed: Boolean
+  detailed: Boolean,
+  expanded: Boolean
 })
-
-type singleScore = {
-  id: number,
-  score: number,
-  bonus: number,
-  total: number
-}
 
 
 // const state = reactive(_tmpScore)
@@ -29,13 +25,17 @@ type singleScore = {
 
 const tmpScore = ref(0);
 const tmpBonus = ref(0);
+const isExpanded = ref(false);
+const expandedClass = ref('score-list score-list--show');
+const doSave = ref(false);
+const gameOverClass = ref('player-wrap');
 const scores : singleScore[] = []
 let total : number = 0;
 let lastScore : number = 0;
 let currentRank : number = 0;
 let leadClass : string = '';
 let rank = '';
-let doSave = ref(false);
+
 
 /**
  * Update the rank text after component mounts or updates
@@ -143,8 +143,11 @@ onMounted(() => {
 
   if (typeof props.playerRank !== 'undefined') {
     currentRank = (props.playerRank * 1);
-
   }
+  isExpanded.value = props.expanded;
+  expandedClass.value = (isExpanded.value)
+    ? 'score-list score-list--show'
+    : 'score-list score-list--hide'
 
   rank = setRank(currentRank);
   leadClass = rank.toLowerCase();
@@ -157,28 +160,41 @@ onUpdated(() => {
 
   rank = setRank(currentRank);
   leadClass = rank.toLowerCase();
+  console.log('props.gameOver:', props.gameOver);
+  gameOverClass.value = (props.gameOver)
+    ? 'player-wrap player-wrap--game-over'
+    : 'player-wrap';
 })
 
 // defineExpose({total});
+function showHide (e: Event) : void {
+  isExpanded.value = !isExpanded.value;
+  expandedClass.value = (isExpanded.value)
+    ? 'score-list score-list--show'
+    : 'score-list score-list--hide'
+}
 </script>
 
 <template>
-  <div class="player-wrap">
+  <div :class="gameOverClass">
     <h3 :class="leadClass">{{ playerName }}: {{total}}</h3>
     <!-- <p v-if="(currentRank > 0)">
       <strong>{{rank}}: </strong> {{props.gameOver ? total : currentRank}}
     </p> -->
-    <p v-if="props.canAdd">
+    <p v-if="(props.canAdd && !props.gameOver)">
       <label for="tmp-score">Latest score:</label>
       <input type="number" id="tmp-score" v-bind:value="tmpScore" @input="setTmpScore" />
 
       <label for="tmp-bonus" v-if="props.allowBonus">Bonus</label>
       <input type="number" id="tmp-bonus" v-bind:value="tmpBonus" @input="setTmpBonus" v-if="props.allowBonus" />
 
-      <button @click="newScore" v-if="(doSave === true)">Save</button>
+      <button @click="newScore" v-if="(doSave === true)">Add</button>
     </p>
 
-    <ScoreList v-if="(scores.length > 0)" :score-list="scores" :key="id"></ScoreList>
+    <!-- <div :class="expandedClass"> -->
+      <!-- <button class="score-list-toggle" @click="showHide">{{props.expanded ? 'collapse' : 'expand'}}</button> -->
+    <ScoreList :score-list="scores" :key="id" :allow-bonus="props.allowBonus" v-if="(scores.length > 0)"></ScoreList>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -206,5 +222,55 @@ button {
 }
 .player-wrap {
   text-align: left;
+  min-width: 14rem;
+}
+.score-list {
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+  margin: -1rem;
+}
+.score-list-toggle {
+  display: inline-block;
+  height: 1rem;
+  position: absolute;
+  right: 0;
+  text-indent: -1000rem;
+  top: 0;
+  width: 1rem;
+}
+.score-list-toggle::after {
+  content: '\025B3';
+  display: inline-block;
+  height: 1rem;
+  left: 0;
+  line-height: 1rem;
+  position: absolute;
+  top: 0;
+  text-indent: 0;
+  transform-origin: 50% 50%;
+  transition: transform ease-in-out 0.3s;
+  width: 1rem;
+}
+.score-list--show .score-list-toggle::after {
+  transform: rotate(180deg);
+}
+.score-list--hide .score-list-toggle::after {
+  transform: rotate(0deg);
+}
+.score-list table {
+  transition: height ease-in-out 0.3s;
+  transform-origin: top center;
+  display: block;
+  width: 100%;
+}
+.score-list--hide table {
+  height: 0;
+}
+.score-list--show table {
+  height: auto;
+}
+h3.winner::after {
+  content: ' (Winner!)';
 }
 </style>

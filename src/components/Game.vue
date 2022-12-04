@@ -1,47 +1,46 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import type { Ref } from 'vue'
+import type { basicPlayer, gamePlayerData, keyedRank, scoreAddedData, simpleScoreData } from '../vite-env.d'
 import Player from './Player.vue'
 
-type _tmpPlayer = {
-  id: number,
-  name: string
-}
 
-type _fullPlayer = {
-  id: number,
-  name: string,
-  score: number,
-  rank: number
-}
-
-const props = defineProps({
-  playerNames: Array<_tmpPlayer>,
+const props = defineProps<{
+  playerNames: Array<basicPlayer>,
   name: String,
-  min: Number,
-  max: Number,
+  min: Number|undefined,
+  max: Number|undefined,
   turns: Boolean,
-  gameOver: Boolean,
+  // gameOver: Boolean|undefined,
   allowBonus: Boolean
-})
+}>()
 
-const players = ref([]);
+const players : Ref<gamePlayerData[]> = ref([]);
+const min : Ref<number|null> = ref(null);
+const max : Ref<number|null> = ref(null);
+const gameOver = ref(false);
 
 /**
  * @var gameNames List of unique game names
  */
 const gameNames : string[] = [];
 
-function scoreUpdated (e: Event) : void {
+function scoreUpdated (e: scoreAddedData) : void {
   console.group('inside scoreUpdated()')
   console.log('e:', e)
 
-  const tmp = [];
+  const tmp : simpleScoreData[] = [];
   players.value.forEach((player, i) => {
     console.log(player.name + ' (before):', player)
 
     if (player.id === e.id) {
       player.score = e.total;
-      player.key += 1;
+      player.key = (typeof player.key === 'number')
+        ? player.key + 1
+        : 0;
+      if ((min.value !== null && player.score <= min.value) || (max.value !== null && player.score >= max.value)) {
+        gameOver.value = true;
+      }
     }
     tmp.push({ 'id': player.id, score: player.score, rank: 0 });
 
@@ -58,7 +57,7 @@ function scoreUpdated (e: Event) : void {
     }
   })
 
-  const ranking = {};
+  const ranking : keyedRank = {};
   for (let a = 0; a < tmp.length; a += 1) {
     ranking[tmp[a].id] = (a + 1);
   }
@@ -95,16 +94,27 @@ onMounted(() => {
       key: 0
     })
   })
+
+  console.log('min.value:', min.value)
+  console.log('max.value:', max.value)
+
+  if (typeof props.min === 'number') {
+    min.value = props.min;
+  }
+  if (typeof props.max === 'number') {
+    max.value = props.max;
+  }
+  console.log('min.value:', min.value)
+  console.log('max.value:', max.value)
   console.log('players.value:', players.value);
 });
 </script>
 
 <template>
   <h2>Playing: <span class="game-name">{{props.name}}</span></h2>
-  <p>Hi this is a game</p>
   <ul class="player-list">
     <li v-for="player in players" :key="player.id" :class="player.rankClass">
-      <Player :player-name="player.name" :player-id="player.id" :player-rank="player.rank" :can-add="(props.turns === false)" v-on:added="scoreUpdated"  />
+      <Player :player-name="player.name" :player-id="player.id" :player-rank="player.rank" :can-add="(props.turns === false)" v-on:added="scoreUpdated" :game-over="gameOver" expanded />
     </li>
   </ul>
 </template>
