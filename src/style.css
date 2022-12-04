@@ -1,0 +1,118 @@
+:root {
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.card {
+  padding: 2em;
+}
+
+#scored {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.input-submit {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.input-submit * {
+  display: inline-block;
+}
+.input-sumbit input {
+  padding: 0.2rem 0.5rem;
+  margin: 0 0 0 0.3rem;
+}
+.input-sumbit button {
+  padding: 0.2rem 0.5rem;
+  margin: 0 0 0 0.3rem;
+}
+h3::after {
+  font-size: 1rem;
+  font-weight: normal;
+  padding-left: 0.3rem;
+}
+.rank-1 h3::after { content: ' (1st)'; }
+.rank-2 h3::after { content: ' (2nd)'; }
+.rank-3 h3::after { content: ' (3rd)'; }
+.rank-4 h3::after { content: ' (4th)'; }
+.rank-5 h3::after { content: ' (5th)'; }
+.rank-6 h3::after { content: ' (6th)'; }
+.rank-7 h3::after { content: ' (7th)'; }
+.rank-8 h3::after { content: ' (8th)'; }
+.rank-9 h3::after { content: ' (9th)'; }
+.rank-10 h3::after, .rank-11 h3::after,
+.rank-12 h3::after, .rank-13 h3::after,
+.rank-14 h3::after, .rank-15 h3::after,
+.rank-16 h3::after {
+  content: '(keep trying)';
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
